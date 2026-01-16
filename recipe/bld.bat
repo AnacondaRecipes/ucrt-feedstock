@@ -2,6 +2,17 @@
 
 mkdir %LIBRARY_BIN%
 
+:: Windows ARM64 only exists on Windows 10+, where UCRT is always part of the OS.
+:: Copy from system to ensure packages can find it in the environment rather than searching PATH.
+if "%target_platform%" == "win-arm64" (
+    echo ARM64 target detected - copying system UCRT to prevent PATH issues during bootstrapping.
+    xcopy "%SystemRoot%\System32\ucrtbase.dll" "%PREFIX%\"
+    if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+    xcopy "%SystemRoot%\System32\ucrtbase.dll" "%LIBRARY_BIN%\"
+    if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+    exit /b 0
+)
+
 %BUILD_PREFIX%/Library/usr/lib/p7zip/7z.exe x 22621.1.220506-1250.ni_release_WindowsSDK.iso -aoa
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
