@@ -6,10 +6,8 @@ mkdir %LIBRARY_BIN%
 :: Copy from system to ensure packages can find it in the environment rather than searching PATH.
 if "%target_platform%" == "win-arm64" (
     echo ARM64 target detected - copying system UCRT to prevent PATH issues during bootstrapping.
-    xcopy "%SystemRoot%\System32\ucrtbase.dll" "%PREFIX%\"
-    if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-    xcopy "%SystemRoot%\System32\ucrtbase.dll" "%LIBRARY_BIN%\"
-    if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
+    xcopy "%SystemRoot%\System32\ucrtbase.dll" "%PREFIX%\" || exit /b 1
+    xcopy "%SystemRoot%\System32\ucrtbase.dll" "%LIBRARY_BIN%\" || exit /b 1
     exit /b 0
 )
 
