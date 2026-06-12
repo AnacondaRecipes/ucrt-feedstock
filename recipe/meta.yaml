@@ -11,7 +11,8 @@ source:
 
 build:
   number: 0
-  skip: true  # [not win]
+  # win-arm64 will support Windows 11 and later, so it gets ucrt from the system. 
+  skip: true  # [not win64]
 
 requirements:
   build:
